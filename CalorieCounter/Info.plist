@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to take photos of food for nutrition analysis.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>This app reads nutrition data from the Health app to provide personalized recommendations.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>This app saves nutrition data to the Health app to help you track your macro nutrients.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>background-processing</string>
+	</array>
+</dict>
+</plist>
