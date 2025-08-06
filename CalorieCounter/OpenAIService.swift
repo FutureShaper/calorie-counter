@@ -160,17 +160,40 @@ class OpenAIService {
         }
     }
     
+    /// Attempts to extract the first valid JSON object from the text.
+    /// This method scans for balanced braces and returns the substring.
     private func extractJSON(from text: String) -> String {
-        // Look for JSON object between braces
-        let pattern = #"\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}"#
+        // Try to parse the entire text as JSON first
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let _ = try? JSONSerialization.jsonObject(with: Data(trimmed.utf8)) {
+            return trimmed
+        }
         
-        if let regex = try? NSRegularExpression(pattern: pattern),
-           let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)) {
-            return String(text[Range(match.range, in: text)!])
+        // If that fails, scan for the first balanced JSON object
+        var braceCount = 0
+        var startIndex: String.Index? = nil
+        var endIndex: String.Index? = nil
+        
+        for (i, char) in text.enumerated() {
+            let idx = text.index(text.startIndex, offsetBy: i)
+            if char == "{" {
+                if braceCount == 0 {
+                    startIndex = idx
+                }
+                braceCount += 1
+            } else if char == "}" {
+                braceCount -= 1
+                if braceCount == 0, let s = startIndex {
+                    endIndex = idx
+                    // Found a balanced JSON object
+                    let jsonSubstring = text[s...endIndex!]
+                    return String(jsonSubstring)
+                }
+            }
         }
         
         // Fallback: return the entire text and hope it's valid JSON
-        return text.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed
     }
 }
 
