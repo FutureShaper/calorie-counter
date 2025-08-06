@@ -8,8 +8,14 @@ class MLModelManager: ObservableObject {
     @Published var lastResult: FoodRecognitionResult?
     @Published var errorMessage: String?
     
-    // For this bootstrap version, we'll use a simulated ML model
-    // In production, you would use a trained Core ML model
+    private var openAIService: OpenAIService?
+    
+    init() {
+        // Initialize OpenAI service with API key
+        if let apiKey = getOpenAIAPIKey() {
+            openAIService = OpenAIService(apiKey: apiKey)
+        }
+    }
     
     func analyzeFood(image: UIImage) async -> FoodRecognitionResult? {
         await MainActor.run {
@@ -23,11 +29,33 @@ class MLModelManager: ObservableObject {
             }
         }
         
+        // Try OpenAI service first, fallback to simulation if not available
+        if let service = openAIService {
+            do {
+                let result = try await service.analyzeFood(image: image)
+                await MainActor.run {
+                    lastResult = result
+                }
+                return result
+            } catch {
+                await MainActor.run {
+                    errorMessage = "OpenAI analysis failed: \(error.localizedDescription)"
+                }
+                // Fallback to simulation
+                return await fallbackToSimulation()
+            }
+        } else {
+            await MainActor.run {
+                errorMessage = "OpenAI API key not configured. Using simulated data."
+            }
+            return await fallbackToSimulation()
+        }
+    }
+    
+    private func fallbackToSimulation() async -> FoodRecognitionResult {
         // Simulate processing time
         try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
         
-        // For demonstration, return simulated nutrition data
-        // In a real app, this would use a trained Core ML model to analyze the image
         let simulatedResult = generateSimulatedNutritionData()
         
         await MainActor.run {
@@ -35,6 +63,31 @@ class MLModelManager: ObservableObject {
         }
         
         return simulatedResult
+    }
+    
+    private func getOpenAIAPIKey() -> String? {
+        // Priority order for API key:
+        // 1. Environment variable
+        // 2. Info.plist
+        // 3. Hardcoded (for development only - not recommended for production)
+        
+        // Check environment variable
+        if let envKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"], !envKey.isEmpty {
+            return envKey
+        }
+        
+        // Check Info.plist
+        if let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
+           let plist = NSDictionary(contentsOfFile: path),
+           let apiKey = plist["OpenAI_API_Key"] as? String, !apiKey.isEmpty {
+            return apiKey
+        }
+        
+        // For development/testing, you can temporarily hardcode your API key here
+        // WARNING: Never commit real API keys to version control
+        // return "your-api-key-here"
+        
+        return nil
     }
     
     private func generateSimulatedNutritionData() -> FoodRecognitionResult {

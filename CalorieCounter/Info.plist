@@ -8,5 +8,7 @@
 	<string>This app reads nutrition data from the Health app to provide personalized recommendations.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>This app saves nutrition data to the Health app to help you track your macro nutrients.</string>
+	<key>OpenAI_API_Key</key>
+	<string>$(OPENAI_API_KEY)</string>
 </dict>
 </plist>
