@@ -55,15 +55,21 @@ class HealthKitManager: ObservableObject {
         
         let samples = createHealthKitSamples(from: nutritionData)
         
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for sample in samples {
-                group.addTask {
-                    try await self.healthStore.save(sample)
+        try await saveSamples(samples)
+    }
+    
+    // Helper to save multiple samples using async/await
+    private func saveSamples(_ samples: [HKSample]) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            healthStore.save(samples) { success, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else if success {
+                    continuation.resume()
+                } else {
+                    continuation.resume(throwing: HealthKitError.dataNotAvailable)
                 }
             }
-            
-            // Wait for all saves to complete
-            for try await _ in group {}
         }
     }
     
