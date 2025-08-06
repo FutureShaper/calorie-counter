@@ -133,7 +133,8 @@ struct ContentView: View {
                 }
                 .padding(.vertical)
             }
-            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
         }
         .onAppear {
             // Request HealthKit authorization on launch
