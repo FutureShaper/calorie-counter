@@ -132,7 +132,7 @@ class OpenAIService {
             throw OpenAIError.emptyResponse
         }
         
-        // Try to extract JSON from the response
+        // Try to extract and validate JSON from the response
         let jsonString = extractJSON(from: content)
         
         guard let jsonData = jsonString.data(using: .utf8) else {
@@ -141,6 +141,9 @@ class OpenAIService {
         
         do {
             let nutritionResponse = try JSONDecoder().decode(OpenAINutritionResponse.self, from: jsonData)
+            
+            // Additional validation of decoded values
+            try validateNutritionValues(nutritionResponse)
             
             let nutritionData = NutritionData(
                 protein: nutritionResponse.protein,
@@ -155,8 +158,38 @@ class OpenAIService {
                 nutritionData: nutritionData,
                 recognizedFoodName: nutritionResponse.foodName
             )
-        } catch {
-            throw OpenAIError.nutritionParsingError
+        } catch let decodingError {
+            // Provide more specific error information
+            throw OpenAIError.nutritionParsingError(details: "Failed to decode nutrition JSON: \(decodingError.localizedDescription)")
+        }
+    }
+    
+    /// Validates that nutrition values are reasonable and within expected ranges
+    private func validateNutritionValues(_ nutrition: OpenAINutritionResponse) throws {
+        // Check for negative values
+        guard nutrition.protein >= 0,
+              nutrition.carbohydrates >= 0,
+              nutrition.fats >= 0,
+              nutrition.fiber >= 0 else {
+            throw OpenAIError.nutritionParsingError(details: "Nutrition values cannot be negative")
+        }
+        
+        // Check for unreasonably high values (per 1000g serving)
+        guard nutrition.protein <= 1000,
+              nutrition.carbohydrates <= 1000,
+              nutrition.fats <= 1000,
+              nutrition.fiber <= 1000 else {
+            throw OpenAIError.nutritionParsingError(details: "Nutrition values exceed reasonable limits")
+        }
+        
+        // Validate confidence range
+        guard nutrition.confidence >= 0.0 && nutrition.confidence <= 1.0 else {
+            throw OpenAIError.nutritionParsingError(details: "Confidence must be between 0.0 and 1.0")
+        }
+        
+        // Validate food name is not empty
+        guard !nutrition.foodName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw OpenAIError.nutritionParsingError(details: "Food name cannot be empty")
         }
     }
     
@@ -278,7 +311,7 @@ enum OpenAIError: LocalizedError {
     case decodingError
     case emptyResponse
     case invalidJSONResponse
-    case nutritionParsingError
+    case nutritionParsingError(details: String)
     
     var errorDescription: String? {
         switch self {
@@ -298,8 +331,8 @@ enum OpenAIError: LocalizedError {
             return "Received empty response from API"
         case .invalidJSONResponse:
             return "Invalid JSON response format"
-        case .nutritionParsingError:
-            return "Failed to parse nutrition data"
+        case .nutritionParsingError(let details):
+            return "Failed to parse nutrition data: \(details)"
         }
     }
 }
