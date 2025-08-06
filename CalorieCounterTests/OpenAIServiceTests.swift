@@ -36,15 +36,19 @@ final class OpenAIServiceTests: XCTestCase {
     func testNutritionDataCalculation() {
         // Test that nutrition data calculates calories correctly
         let nutritionData = NutritionData(
-            protein: 20.0,      // 20g * 4 cal/g = 80 cal
-            carbohydrates: 30.0, // 30g * 4 cal/g = 120 cal
-            fats: 10.0,         // 10g * 9 cal/g = 90 cal
-            fiber: 5.0,         // 5g * 2 cal/g = 10 cal
+            protein: 20.0,      // 20g * PROTEIN_CALORIES_PER_GRAM = 80 cal
+            carbohydrates: 30.0, // 30g * CARBOHYDRATE_CALORIES_PER_GRAM = 120 cal
+            fats: 10.0,         // 10g * FAT_CALORIES_PER_GRAM = 90 cal
+            fiber: 5.0,         // 5g * FIBER_CALORIES_PER_GRAM = 10 cal
             foodName: "Test Food"
         )
         
-        // Total expected calories: 80 + 120 + 90 + 10 = 300
-        XCTAssertEqual(nutritionData.calories, 300.0, accuracy: 0.1)
+        // Total expected calories: (20 * PROTEIN_CALORIES_PER_GRAM) + (30 * CARBOHYDRATE_CALORIES_PER_GRAM) + (10 * FAT_CALORIES_PER_GRAM) + (5 * FIBER_CALORIES_PER_GRAM)
+        let expectedCalories = (20.0 * PROTEIN_CALORIES_PER_GRAM)
+                            + (30.0 * CARBOHYDRATE_CALORIES_PER_GRAM)
+                            + (10.0 * FAT_CALORIES_PER_GRAM)
+                            + (5.0 * FIBER_CALORIES_PER_GRAM)
+        XCTAssertEqual(nutritionData.calories, expectedCalories, accuracy: 0.1)
         XCTAssertEqual(nutritionData.protein, 20.0)
         XCTAssertEqual(nutritionData.carbohydrates, 30.0)
         XCTAssertEqual(nutritionData.fats, 10.0)
