@@ -14,13 +14,23 @@ struct MockNutritionData {
     let calories: Double
     let foodName: String?
     
+    // Caloric values per gram (kcal/g) for each macronutrient
+    private static let proteinCaloriesPerGram = 4.0      // Protein: 4 kcal/g
+    private static let carbohydrateCaloriesPerGram = 4.0 // Carbohydrates: 4 kcal/g
+    private static let fatCaloriesPerGram = 9.0          // Fats: 9 kcal/g
+    private static let fiberCaloriesPerGram = 2.0        // Fiber: 2 kcal/g
+    
     init(protein: Double, carbohydrates: Double, fats: Double, fiber: Double, foodName: String? = nil) {
         self.protein = protein
         self.carbohydrates = carbohydrates
         self.fats = fats
         self.fiber = fiber
         self.foodName = foodName
-        self.calories = (protein * 4) + (carbohydrates * 4) + (fats * 9) + (fiber * 2)
+        self.calories =
+            (protein * MockNutritionData.proteinCaloriesPerGram) +
+            (carbohydrates * MockNutritionData.carbohydrateCaloriesPerGram) +
+            (fats * MockNutritionData.fatCaloriesPerGram) +
+            (fiber * MockNutritionData.fiberCaloriesPerGram)
     }
 }
 
