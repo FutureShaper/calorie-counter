@@ -9,6 +9,7 @@ An iPhone iOS app that uses machine learning to analyze food photos and track ma
 - 💾 **HealthKit Integration**: Automatically save nutrition data to Apple Health app
 - 🔐 **Secure Configuration**: In-app secure storage for OpenAI API keys using iOS Keychain
 - 📱 **Native iOS**: Built with SwiftUI for modern iOS devices (iOS 17.0+)
+- 🤖 **Agentic AI Examples**: Explore advanced AI workflows for enterprise applications
 
 ## Technical Stack
 
@@ -424,8 +425,25 @@ The app currently recognizes these sample foods:
 3. Results displayed in UI
 4. User saves to Health app via `HealthKitManager`
 
+## AI/ML Exploration and Examples
+
+Beyond the core calorie counting functionality, this repository includes examples of advanced AI workflows that demonstrate how similar technologies can be applied to enterprise scenarios:
+
+### 📓 Agentic Workflows for ERP
+- **[Jupyter Notebook](agentic_erp_workflow.ipynb)**: Interactive examples of AI agents that can autonomously manage enterprise resource planning processes
+- **[Blog Article](agentic_erp_blog_article.md)**: In-depth exploration of how agentic workflows transform traditional ML approaches
+
+These examples showcase how the same OpenAI integration patterns used in our calorie counter can be extended to create intelligent agents that:
+- Process invoices and make approval decisions
+- Optimize supply chain operations
+- Generate financial reports with insights
+- Coordinate multi-agent workflows for complex business processes
+
+The examples demonstrate the evolution from traditional ML (static predictions) to agentic workflows (autonomous reasoning and action), providing a foundation for understanding enterprise AI applications.
+
 ## Future Enhancements
 
+### Core App Features
 - [ ] Integration with real Core ML food recognition model
 - [ ] Food database for improved nutrition accuracy
 - [ ] Portion size estimation
@@ -433,6 +451,12 @@ The app currently recognizes these sample foods:
 - [ ] Nutritional goals and recommendations
 - [ ] Barcode scanning for packaged foods
 - [ ] Social sharing features
+
+### AI/ML Extensions
+- [ ] Real-time OpenAI API integration for the ERP examples
+- [ ] Additional agentic workflow examples (healthcare, logistics, customer service)
+- [ ] Integration with local LLM models for offline operation
+- [ ] Advanced multi-agent coordination patterns
 
 ## Contributing
 
