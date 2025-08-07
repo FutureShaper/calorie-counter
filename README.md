@@ -37,7 +37,7 @@ CalorieCounter/
 
 - Xcode 15.0 or later
 - iOS 17.0+ device or simulator
-- Apple Developer account (for device testing)
+- Apple ID (free for personal device testing, $99/year Developer Program for distribution)
 
 ### Installation
 
@@ -60,6 +60,9 @@ CalorieCounter/
 4. Build and run the app:
    - Select your target device or simulator
    - Press Cmd+R to build and run
+   - **For iPhone device deployment**, see detailed instructions in section 4a below
+
+**Note**: Camera functionality requires a physical iPhone device. Simulator testing is limited to photo library selection.
 
 ## Detailed Xcode Import and Setup Guide
 
@@ -142,6 +145,145 @@ Choose one of these methods to configure your OpenAI API key:
    - Press Cmd+R to build and run
    - Or click the Play button (▶️) in the toolbar
 
+#### 4a. iPhone Device Deployment
+
+For testing on a physical iPhone device (recommended for full functionality including camera):
+
+**Prerequisites for Device Deployment:**
+
+**Option A: Free Apple ID Deployment (Personal Testing)**
+
+1. **Free Apple ID** (No cost):
+   - Any Apple ID (no Apple Developer Program membership required)
+   - Perfect for personal testing and development
+   - **Limitations**: Apps expire after 7 days, limited to 3 personal devices, no App Store distribution
+
+2. **iPhone Device Requirements**:
+   - iOS 17.0 or later
+   - Must be your personal device (signed into the same Apple ID or family sharing)
+   - USB cable or Wi-Fi connection for deployment
+
+**Option B: Apple Developer Program (Full Distribution)**
+
+1. **Paid Apple Developer Account** ($99/year):
+   - Required for: App Store distribution, TestFlight, distributing to other devices
+   - Apps remain valid for 1 year
+   - Access to advanced capabilities and beta software
+
+2. **iPhone Device Requirements**:
+   - iOS 17.0 or later
+   - Can deploy to any registered device (up to 100 devices per year)
+   - USB cable or Wi-Fi connection for deployment
+
+**Step-by-Step Device Deployment:**
+
+1. **Connect Your iPhone**:
+   - Connect iPhone to Mac via USB cable
+   - Or enable wireless deployment: Window → Devices and Simulators → Select device → "Connect via network"
+   - Trust the computer when prompted on your iPhone
+
+2. **Configure Device in Xcode**:
+   - Open Window → Devices and Simulators in Xcode
+   - Select your iPhone from the left panel
+   - Ensure device shows as "Ready for Development"
+   - If not ready, click "Use for Development" and follow prompts
+
+3. **Apple ID Setup in Xcode**:
+   - In Xcode: Xcode → Preferences → Accounts
+   - Click "+" and add your Apple ID
+   - **For Free Apple ID**: Sign in with your personal Apple ID (same one used on your iPhone)
+   - **For Paid Developer**: Sign in with your Apple Developer Program account credentials
+   - Xcode will automatically download available certificates and provisioning profiles
+
+4. **Project Signing Configuration**:
+   - Select CalorieCounter project in Project Navigator
+   - Choose CalorieCounter target under TARGETS
+   - Go to "Signing & Capabilities" tab
+   - **For Free Apple ID**: 
+     - Select your personal Apple ID team from dropdown (appears as "Your Name (Personal Team)")
+     - Ensure "Automatically manage signing" is checked
+     - Change Bundle Identifier to be unique (e.g., `com.yourname.CalorieCounter`)
+   - **For Paid Developer Account**:
+     - Select your Apple Developer team from dropdown
+     - Ensure "Automatically manage signing" is checked
+     - Change Bundle Identifier to be unique (e.g., `com.yourcompany.CalorieCounter`)
+
+5. **Device Registration**:
+   - **For Free Apple ID**: Device is automatically registered (limited to 3 personal devices)
+   - **For Paid Developer**: With device connected and configured, select it from device selector. Xcode will automatically register it (uses one of your 100 device slots per year)
+
+6. **Deploy to Device**:
+   - Select your iPhone from the device/simulator selector
+   - Press Cmd+R to build and deploy
+   - First deployment may take longer as Xcode installs the app
+
+7. **Trust Developer Certificate on Device**:
+   - On first run, you'll see "Untrusted Developer" error
+   - On iPhone: Settings → General → VPN & Device Management
+   - **For Free Apple ID**: Find your certificate under "Developer App" (shows as your Apple ID)
+   - **For Paid Developer**: Find your developer certificate under "Developer App"
+   - Tap certificate and select "Trust [Your Name/Company]"
+   - Confirm by tapping "Trust"
+
+8. **Launch and Test**:
+   - Return to home screen and launch CalorieCounter app
+   - Grant camera and HealthKit permissions when prompted
+   - Test camera functionality (not available in simulator)
+
+**Important Notes for Free Apple ID Deployment:**
+
+- **7-Day Limitation**: Apps installed with free Apple ID expire after 7 days and must be re-deployed
+- **Device Limit**: Limited to 3 personal devices per Apple ID
+- **Re-deployment**: To continue using after 7 days, simply connect device and deploy again (Cmd+R)
+- **No Distribution**: Cannot share app with other people or devices
+- **Perfect for Development**: Ideal for personal testing and app development
+
+**Important Notes for Device Deployment:**
+
+- **Camera Functionality**: Only works on physical devices, not simulators
+- **HealthKit Integration**: Works on both devices and simulators
+- **Performance**: Better performance testing on physical devices
+- **Network**: Ensure device has internet connection for OpenAI API calls
+- **Battery**: Consider device battery life during testing
+- **Storage**: App installation requires minimal storage space
+
+**Troubleshooting Device Deployment:**
+
+**"No Developer Account" Error**:
+- **For Free Apple ID**: Ensure you're signed into the same Apple ID in Xcode and on your iPhone
+- **For Paid Developer**: Verify Apple Developer Program membership is active and payment information is current
+- Check account status at developer.apple.com
+
+**"App Installation Failed" / "Could not install app"**:
+- **Free Apple ID**: Ensure device is one of your personal devices (signed into same Apple ID)
+- **Paid Developer**: Verify device is registered with your developer account
+- Ensure sufficient storage space on device
+- Restart both Xcode and your iPhone
+- Try deleting previous app installation from device
+
+**"Device Not Supported" Error**:
+- Update iPhone to iOS 17.0 or later
+- Check iOS version: Settings → General → About → iOS Version
+- Verify Xcode deployment target matches device iOS version
+
+**"Code Signing Failed" Error**:
+- Verify Bundle Identifier is unique and not used by another app
+- **Free Apple ID**: Ensure you're using "Personal Team" in signing settings
+- **Paid Developer**: Check that all certificates are valid and not expired
+- Try cleaning build folder: Product → Clean Build Folder
+- Reset signing: Toggle "Automatically manage signing" off and back on
+
+**"Unable to Install App" / "App Expired" Error**:
+- **Free Apple ID**: App has expired after 7 days - simply re-deploy from Xcode (Cmd+R)
+- Check USB cable connection or wireless connection stability
+- Ensure device trust is still valid
+
+**Network Issues with OpenAI API**:
+- Verify iPhone has internet connectivity
+- Check cellular data permissions for the app
+- Test API key configuration in simulator first
+- Review API usage limits in OpenAI dashboard
+
 #### 5. First Launch Setup
 
 When the app first launches:
@@ -188,17 +330,6 @@ When the app first launches:
 - The camera functionality requires a physical device
 - Use photo library option instead for testing in simulator
 
-#### Device Deployment Issues
-
-**"App installation failed"**:
-- Ensure device is connected and trusted
-- Verify your Apple Developer account has device provisioning
-- Check that iOS version on device matches deployment target
-
-**"Untrusted Developer"**:
-- On device: Settings → General → VPN & Device Management
-- Trust your developer certificate
-
 ### Additional Xcode Tips
 
 - **Use Simulator for Initial Testing**: Test basic functionality without needing a physical device
@@ -223,10 +354,22 @@ The app now uses OpenAI's GPT-4 Vision model to analyze food images and extract 
 - Falls back to simulated data if API is unavailable
 
 ### API Configuration
-- Supports multiple API key configuration methods
-- Environment variables, build settings, or direct configuration
-- Graceful fallback to simulated data when API is not available
+
+**Current Configuration Methods** (Developer/Build-time only):
+- Environment variables (`OPENAI_API_KEY`)
+- Xcode build settings (User-Defined Setting)
+- Info.plist configuration
+- Temporary hardcoded values (development only)
+
+**Important Notes:**
+- ⚠️ **No In-App UI Configuration**: The app currently does NOT provide a user interface for configuring the OpenAI API key
+- API key must be configured during development/build process through Xcode
+- End users cannot configure their own API keys through the app interface
+- Graceful fallback to simulated nutrition data when API is not available
 - See [OPENAI_SETUP.md](OPENAI_SETUP.md) for detailed setup instructions
+
+**For Production Apps:**
+Consider implementing secure in-app API key configuration or server-side API management for end-user deployments.
 
 ### Legacy ML Support (Available for Extension)
 The `MLModelManager` is designed to be easily extended with Core ML models:
