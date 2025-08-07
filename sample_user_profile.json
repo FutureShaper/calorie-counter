@@ -1,0 +1,23 @@
+{
+  "age": 30,
+  "gender": "female",
+  "height_cm": 165,
+  "weight_kg": 65,
+  "activity_level": "moderate",
+  "goals": [
+    "weight_management",
+    "general_wellness",
+    "muscle_building"
+  ],
+  "restrictions": [
+    "gluten_sensitive"
+  ],
+  "preferences": [
+    "high_protein",
+    "low_sugar"
+  ],
+  "health_conditions": [],
+  "daily_calorie_target": 1800,
+  "daily_protein_target": 120,
+  "meal_timing_preference": "3_meals_2_snacks"
+}
