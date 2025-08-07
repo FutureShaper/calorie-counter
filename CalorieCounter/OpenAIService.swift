@@ -238,8 +238,7 @@ class OpenAIService {
             } else if char == "}" {
                 braceCount -= 1
                 if braceCount == 0, let start = startIndex {
-                    let endIndex = text.index(after: idx)
-                    let candidate = String(text[start..<endIndex])
+                    let candidate = String(text[start...idx])
                     candidates.append(candidate)
                     startIndex = nil
                 }
