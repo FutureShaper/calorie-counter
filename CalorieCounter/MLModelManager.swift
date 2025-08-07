@@ -67,16 +67,26 @@ class MLModelManager: ObservableObject {
     
     private func getOpenAIAPIKey() -> String? {
         // Priority order for API key:
-        // 1. Environment variable
-        // 2. Info.plist
-        // 3. Hardcoded (for development only - not recommended for production)
+        // 1. Secure Keychain storage (primary for production)
+        // 2. Environment variable (development/CI)
+        // 3. Info.plist (legacy support)
+        // 4. Hardcoded (for development only - not recommended for production)
         
-        // Check environment variable
+        // Check secure Keychain storage first (production)
+        do {
+            if let keychainKey = try SecureCredentialsManager.getOpenAIAPIKey(), !keychainKey.isEmpty {
+                return keychainKey
+            }
+        } catch {
+            print("Failed to retrieve API key from Keychain: \(error.localizedDescription)")
+        }
+        
+        // Check environment variable (development/CI)
         if let envKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"], !envKey.isEmpty {
             return envKey
         }
         
-        // Check Info.plist
+        // Check Info.plist (legacy support)
         if let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
            let plist = NSDictionary(contentsOfFile: path),
            let apiKey = plist["OpenAI_API_Key"] as? String, !apiKey.isEmpty {

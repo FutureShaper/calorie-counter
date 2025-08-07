@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var isAnalyzing = false
     @State private var showingResults = false
     @State private var showingHealthKitAlert = false
+    @State private var showingSettings = false
     @State private var savedToHealthKit = false
     
     var body: some View {
@@ -15,14 +16,28 @@ struct ContentView: View {
                 VStack(spacing: 24) {
                     // Header
                     VStack {
-                        Text("📱 Calorie Counter")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                        
-                        Text("Take a photo of your food to analyze its nutrition content")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("📱 Calorie Counter")
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                
+                                Text("Take a photo of your food to analyze its nutrition content")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.leading)
+                            }
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                showingSettings = true
+                            }) {
+                                Image(systemName: "gear")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
+                            }
+                        }
                     }
                     .padding(.horizontal)
                     
@@ -146,6 +161,9 @@ struct ContentView: View {
             Button("OK") { }
         } message: {
             Text("Your nutrition data has been saved to the Health app successfully.")
+        }
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
         }
     }
     
