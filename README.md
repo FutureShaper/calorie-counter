@@ -37,7 +37,7 @@ CalorieCounter/
 
 - Xcode 15.0 or later
 - iOS 17.0+ device or simulator
-- Apple Developer account (for device testing)
+- Apple ID (free for personal device testing, $99/year Developer Program for distribution)
 
 ### Installation
 
@@ -151,14 +151,28 @@ For testing on a physical iPhone device (recommended for full functionality incl
 
 **Prerequisites for Device Deployment:**
 
-1. **Apple Developer Account** (Required):
-   - Personal Apple ID with Apple Developer Program membership ($99/year)
-   - Or access to an organization's Apple Developer account
-   - Free Apple ID accounts have limited device deployment capabilities
+**Option A: Free Apple ID Deployment (Personal Testing)**
+
+1. **Free Apple ID** (No cost):
+   - Any Apple ID (no Apple Developer Program membership required)
+   - Perfect for personal testing and development
+   - **Limitations**: Apps expire after 7 days, limited to 3 personal devices, no App Store distribution
 
 2. **iPhone Device Requirements**:
    - iOS 17.0 or later
-   - Device registered with your Apple Developer account
+   - Must be your personal device (signed into the same Apple ID or family sharing)
+   - USB cable or Wi-Fi connection for deployment
+
+**Option B: Apple Developer Program (Full Distribution)**
+
+1. **Paid Apple Developer Account** ($99/year):
+   - Required for: App Store distribution, TestFlight, distributing to other devices
+   - Apps remain valid for 1 year
+   - Access to advanced capabilities and beta software
+
+2. **iPhone Device Requirements**:
+   - iOS 17.0 or later
+   - Can deploy to any registered device (up to 100 devices per year)
    - USB cable or Wi-Fi connection for deployment
 
 **Step-by-Step Device Deployment:**
@@ -174,24 +188,29 @@ For testing on a physical iPhone device (recommended for full functionality incl
    - Ensure device shows as "Ready for Development"
    - If not ready, click "Use for Development" and follow prompts
 
-3. **Apple Developer Account Setup**:
+3. **Apple ID Setup in Xcode**:
    - In Xcode: Xcode → Preferences → Accounts
    - Click "+" and add your Apple ID
-   - Sign in with your Apple Developer account credentials
-   - Download certificates and provisioning profiles
+   - **For Free Apple ID**: Sign in with your personal Apple ID (same one used on your iPhone)
+   - **For Paid Developer**: Sign in with your Apple Developer Program account credentials
+   - Xcode will automatically download available certificates and provisioning profiles
 
 4. **Project Signing Configuration**:
    - Select CalorieCounter project in Project Navigator
    - Choose CalorieCounter target under TARGETS
    - Go to "Signing & Capabilities" tab
-   - Select your Apple Developer team from dropdown
-   - Ensure "Automatically manage signing" is checked
-   - Change Bundle Identifier to be unique (e.g., `com.yourname.CalorieCounter`)
+   - **For Free Apple ID**: 
+     - Select your personal Apple ID team from dropdown (appears as "Your Name (Personal Team)")
+     - Ensure "Automatically manage signing" is checked
+     - Change Bundle Identifier to be unique (e.g., `com.yourname.CalorieCounter`)
+   - **For Paid Developer Account**:
+     - Select your Apple Developer team from dropdown
+     - Ensure "Automatically manage signing" is checked
+     - Change Bundle Identifier to be unique (e.g., `com.yourcompany.CalorieCounter`)
 
 5. **Device Registration**:
-   - With device connected and configured, select it from device selector
-   - If device isn't registered, Xcode will automatically register it with your developer account
-   - This uses one of your 100 device slots per year
+   - **For Free Apple ID**: Device is automatically registered (limited to 3 personal devices)
+   - **For Paid Developer**: With device connected and configured, select it from device selector. Xcode will automatically register it (uses one of your 100 device slots per year)
 
 6. **Deploy to Device**:
    - Select your iPhone from the device/simulator selector
@@ -201,14 +220,23 @@ For testing on a physical iPhone device (recommended for full functionality incl
 7. **Trust Developer Certificate on Device**:
    - On first run, you'll see "Untrusted Developer" error
    - On iPhone: Settings → General → VPN & Device Management
-   - Find your developer certificate under "Developer App"
-   - Tap certificate and select "Trust [Your Name]"
+   - **For Free Apple ID**: Find your certificate under "Developer App" (shows as your Apple ID)
+   - **For Paid Developer**: Find your developer certificate under "Developer App"
+   - Tap certificate and select "Trust [Your Name/Company]"
    - Confirm by tapping "Trust"
 
 8. **Launch and Test**:
    - Return to home screen and launch CalorieCounter app
    - Grant camera and HealthKit permissions when prompted
    - Test camera functionality (not available in simulator)
+
+**Important Notes for Free Apple ID Deployment:**
+
+- **7-Day Limitation**: Apps installed with free Apple ID expire after 7 days and must be re-deployed
+- **Device Limit**: Limited to 3 personal devices per Apple ID
+- **Re-deployment**: To continue using after 7 days, simply connect device and deploy again (Cmd+R)
+- **No Distribution**: Cannot share app with other people or devices
+- **Perfect for Development**: Ideal for personal testing and app development
 
 **Important Notes for Device Deployment:**
 
@@ -222,9 +250,16 @@ For testing on a physical iPhone device (recommended for full functionality incl
 **Troubleshooting Device Deployment:**
 
 **"No Developer Account" Error**:
-- Verify Apple Developer Program membership is active
+- **For Free Apple ID**: Ensure you're signed into the same Apple ID in Xcode and on your iPhone
+- **For Paid Developer**: Verify Apple Developer Program membership is active and payment information is current
 - Check account status at developer.apple.com
-- Ensure payment information is current
+
+**"App Installation Failed" / "Could not install app"**:
+- **Free Apple ID**: Ensure device is one of your personal devices (signed into same Apple ID)
+- **Paid Developer**: Verify device is registered with your developer account
+- Ensure sufficient storage space on device
+- Restart both Xcode and your iPhone
+- Try deleting previous app installation from device
 
 **"Device Not Supported" Error**:
 - Update iPhone to iOS 17.0 or later
@@ -232,16 +267,16 @@ For testing on a physical iPhone device (recommended for full functionality incl
 - Verify Xcode deployment target matches device iOS version
 
 **"Code Signing Failed" Error**:
-- Verify Bundle Identifier is unique and matches your developer account
-- Check that all certificates are valid and not expired
+- Verify Bundle Identifier is unique and not used by another app
+- **Free Apple ID**: Ensure you're using "Personal Team" in signing settings
+- **Paid Developer**: Check that all certificates are valid and not expired
 - Try cleaning build folder: Product → Clean Build Folder
 - Reset signing: Toggle "Automatically manage signing" off and back on
 
-**"Unable to Install App" Error**:
-- Ensure sufficient storage space on device
-- Restart both Xcode and your iPhone
-- Try deleting previous app installation from device
+**"Unable to Install App" / "App Expired" Error**:
+- **Free Apple ID**: App has expired after 7 days - simply re-deploy from Xcode (Cmd+R)
 - Check USB cable connection or wireless connection stability
+- Ensure device trust is still valid
 
 **Network Issues with OpenAI API**:
 - Verify iPhone has internet connectivity
