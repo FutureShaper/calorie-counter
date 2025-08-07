@@ -15,6 +15,10 @@
 		1A00000C294A123456789ABC /* NutritionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000B294A123456789ABC /* NutritionModel.swift */; };
 		1A00000E294A123456789ABC /* MLModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000D294A123456789ABC /* MLModelManager.swift */; };
 		1A000010294A123456789ABC /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A00000F294A123456789ABC /* HealthKitManager.swift */; };
+		1A000012294A123456789ABC /* SecureCredentialsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000011294A123456789ABC /* SecureCredentialsManager.swift */; };
+		1A000014294A123456789ABC /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000013294A123456789ABC /* SettingsManager.swift */; };
+		1A000016294A123456789ABC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000015294A123456789ABC /* SettingsView.swift */; };
+		1A000018294A123456789ABC /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A000017294A123456789ABC /* OpenAIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,8 +30,12 @@
 		1A00000B294A123456789ABC /* NutritionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionModel.swift; sourceTree = "<group>"; };
 		1A00000D294A123456789ABC /* MLModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLModelManager.swift; sourceTree = "<group>"; };
 		1A00000F294A123456789ABC /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		1A000011294A123456789ABC /* SecureCredentialsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureCredentialsManager.swift; sourceTree = "<group>"; };
+		1A000013294A123456789ABC /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		1A000015294A123456789ABC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1A000017294A123456789ABC /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		1AFFFFFF294A123456789ABC /* CalorieCounter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CalorieCounter.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1A000011294A123456789ABC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A000019294A123456789ABC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,8 +67,13 @@
 				1A00000B294A123456789ABC /* NutritionModel.swift */,
 				1A00000D294A123456789ABC /* MLModelManager.swift */,
 				1A00000F294A123456789ABC /* HealthKitManager.swift */,
+				1A000011294A123456789ABC /* SecureCredentialsManager.swift */,
+				1A000013294A123456789ABC /* SettingsManager.swift */,
+				1A000015294A123456789ABC /* SettingsView.swift */,
+				1A000017294A123456789ABC /* OpenAIService.swift */,
 				1A000004294A123456789ABC /* Assets.xcassets */,
 				1A000006294A123456789ABC /* Preview Content */,
+				1A000019294A123456789ABC /* Info.plist */,
 			);
 			path = CalorieCounter;
 			sourceTree = "<group>";
@@ -148,6 +161,10 @@
 				1A00000C294A123456789ABC /* NutritionModel.swift in Sources */,
 				1A00000E294A123456789ABC /* MLModelManager.swift in Sources */,
 				1A000010294A123456789ABC /* HealthKitManager.swift in Sources */,
+				1A000012294A123456789ABC /* SecureCredentialsManager.swift in Sources */,
+				1A000014294A123456789ABC /* SettingsManager.swift in Sources */,
+				1A000016294A123456789ABC /* SettingsView.swift in Sources */,
+				1A000018294A123456789ABC /* OpenAIService.swift in Sources */,
 				1A000001294A123456789ABC /* CalorieCounterApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

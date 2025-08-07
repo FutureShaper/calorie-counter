@@ -7,6 +7,7 @@ An iPhone iOS app that uses machine learning to analyze food photos and track ma
 - 📸 **Photo Capture**: Take pictures of food dishes using the camera or select from photo library
 - 🧠 **ML-Powered Analysis**: Analyze food images to estimate macro nutrients (protein, carbohydrates, fats, fiber)
 - 💾 **HealthKit Integration**: Automatically save nutrition data to Apple Health app
+- 🔐 **Secure Configuration**: In-app secure storage for OpenAI API keys using iOS Keychain
 - 📱 **Native iOS**: Built with SwiftUI for modern iOS devices (iOS 17.0+)
 
 ## Technical Stack
@@ -27,6 +28,10 @@ CalorieCounter/
 ├── NutritionModel.swift         # Data models for nutrition
 ├── MLModelManager.swift         # ML inference manager
 ├── HealthKitManager.swift       # HealthKit integration
+├── OpenAIService.swift          # OpenAI API integration
+├── SecureCredentialsManager.swift # Secure credential storage
+├── SettingsManager.swift        # App settings coordination
+├── SettingsView.swift           # Settings UI configuration
 ├── Assets.xcassets/             # App icons and assets
 └── Info.plist                  # App permissions and config
 ```
@@ -52,10 +57,19 @@ CalorieCounter/
    open CalorieCounter.xcodeproj
    ```
 
-3. Configure OpenAI API key (see [OPENAI_SETUP.md](OPENAI_SETUP.md) for details):
+3. Configure OpenAI API key:
+   
+   **Option A: In-App Configuration (Recommended for Production)**
+   - Build and run the app
+   - Tap the Settings gear icon (⚙️) in the top-right
+   - Follow the in-app instructions to securely store your API key
+   
+   **Option B: Development Configuration**
    ```bash
    export OPENAI_API_KEY="your-api-key-here"
    ```
+   
+   See [SECURE_CONFIGURATION.md](SECURE_CONFIGURATION.md) for detailed setup options.
 
 4. Build and run the app:
    - Select your target device or simulator
@@ -354,6 +368,12 @@ The app now uses OpenAI's GPT-4 Vision model to analyze food images and extract 
 - Falls back to simulated data if API is unavailable
 
 ### API Configuration
+
+- **Secure In-App Configuration**: Users can configure API keys through a native settings interface
+- **iOS Keychain Integration**: Credentials stored securely using iOS Keychain Services
+- **Multiple Configuration Methods**: Supports Keychain, environment variables, and build settings
+- **Graceful Fallback**: Falls back to simulated data when API is not available
+- See [SECURE_CONFIGURATION.md](SECURE_CONFIGURATION.md) for complete setup guide
 
 **Current Configuration Methods** (Developer/Build-time only):
 - Environment variables (`OPENAI_API_KEY`)
