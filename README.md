@@ -367,6 +367,23 @@ The app now uses OpenAI's GPT-4 Vision model to analyze food images and extract 
 - Receives structured JSON responses with nutrition data
 - Falls back to simulated data if API is unavailable
 
+### 🚀 NEW: Agentic Workflow Example
+We've added a comprehensive **agentic workflow example** that demonstrates how multiple specialized AI agents can work together to provide far more sophisticated food analysis than traditional single-model approaches.
+
+**What's Included:**
+- 📓 **Jupyter Notebook**: Complete implementation of multi-agent food analysis system
+- 📝 **Blog Article**: Detailed explanation of agentic vs traditional ML approaches  
+- 🤖 **5 Specialized Agents**: Planning, Nutrition, Health, Meal Planning, and Verification agents
+- 🔄 **Workflow Orchestration**: Coordinated multi-agent analysis with quality assurance
+
+**Key Benefits of Agentic Approach:**
+- **11+ nutrition metrics** vs 4 in traditional approach
+- **Personalized health recommendations** based on user profiles
+- **Meal planning suggestions** for complete nutrition
+- **Built-in verification** and quality assurance
+- **Full transparency** with agent coordination logs
+- **Extensible architecture** for adding new capabilities
+
 ### API Configuration
 
 - **Secure In-App Configuration**: Users can configure API keys through a native settings interface
@@ -417,15 +434,124 @@ The app currently recognizes these sample foods:
 4. **HealthKitManager**: Handles all HealthKit operations
 5. **NutritionModel**: Data structures for nutrition information
 
+### Agentic Workflow Architecture (New!)
+
+Our **agentic workflow example** demonstrates advanced multi-agent food analysis:
+
+```
+📸 Image Input
+    ↓
+🧠 Planning Agent
+    ├─ Identifies food items and preparation methods
+    ├─ Estimates portion sizes and weights  
+    └─ Creates comprehensive analysis strategy
+    ↓
+🧮 Nutrition Agent ←→ 💊 Health Agent ←→ 🍽️ Meal Planning Agent
+    │                      │                    │
+    ├─ 11+ nutrition       ├─ Personalized      ├─ Complementary
+    │  metrics             │  recommendations   │  food suggestions
+    ├─ Macro/micronutrients├─ Health risk       ├─ Meal balance
+    └─ Bioavailability     │  assessment        └─ Food pairing
+                           └─ Dietary advice           
+    ↓
+✅ Verification Agent
+    ├─ Cross-checks all results
+    ├─ Validates recommendations
+    ├─ Calculates confidence scores
+    └─ Ensures quality assurance
+    ↓
+📊 Comprehensive Analysis Result
+```
+
+**Agent Specializations:**
+- **Planning Agent**: Strategic image analysis and workflow coordination
+- **Nutrition Agent**: Deep macro/micronutrient analysis with preparation effects
+- **Health Agent**: Personalized recommendations based on user profile and goals
+- **Meal Planning Agent**: Complementary food suggestions and meal optimization
+- **Verification Agent**: Quality assurance, validation, and confidence scoring
+
 ### Data Flow
 
+#### Traditional ML Flow (Current iOS App)
 1. User takes/selects food photo
 2. `MLModelManager` analyzes image → nutrition data
 3. Results displayed in UI
 4. User saves to Health app via `HealthKitManager`
 
+#### Agentic Workflow Flow (Example Implementation)
+1. **Image Analysis**: Planning Agent examines food photo and creates analysis strategy
+2. **Parallel Processing**: Nutrition, Health, and Meal Planning agents work simultaneously
+3. **Deep Analysis**: Each agent provides specialized insights in their domain
+4. **Verification**: Verification Agent validates and cross-checks all results
+5. **Comprehensive Results**: User receives detailed nutrition data, health recommendations, and meal suggestions
+6. **Quality Assurance**: Built-in confidence scoring and consistency checking
+
+## 🚀 Agentic Workflow Examples
+
+### Getting Started with Agentic Analysis
+
+1. **Explore the Jupyter Notebook**:
+   ```bash
+   jupyter notebook agentic_workflow_example.ipynb
+   ```
+
+2. **Read the Blog Article**:
+   ```bash
+   open blog_article_agentic_workflows.md
+   ```
+
+3. **Run the Python Implementation**:
+   ```python
+   # Set your OpenAI API key
+   export OPENAI_API_KEY="your-api-key-here"
+   
+   # Initialize the agentic workflow
+   from agentic_workflow_example import AgenticWorkflowOrchestrator
+   orchestrator = AgenticWorkflowOrchestrator(api_key)
+   
+   # Analyze a food image
+   result = await orchestrator.analyze_food_image(image_base64, user_profile)
+   ```
+
+### Sample Agentic Analysis Output
+
+```python
+🤖 Agentic Analysis Results:
+📊 Analysis Confidence: 89%
+⏰ Analysis Time: 2023-12-07 14:30:30
+
+🍽️ Identified Foods:
+   • Grilled Chicken Breast (150g) - 92% confidence
+   • Steamed Broccoli (100g) - 88% confidence
+
+📈 Nutrition Analysis:
+   • Calories: 210 kcal
+   • Protein: 35.2g
+   • Carbohydrates: 8.5g
+   • Fats: 4.2g
+   • Fiber: 3.8g
+   • Vitamin C: 89mg
+
+💡 Health Recommendations:
+   🟡 Excellent protein content! Consider adding complex carbohydrates
+   🟢 Outstanding vitamin C content supports immune function
+
+🥗 Meal Suggestions:
+   • Quinoa (1/2 cup cooked): Adds complete protein and complex carbs
+   • Avocado slices: Healthy fats for nutrient absorption
+
+🤖 Agent Coordination Log:
+   [14:30:15] Planning Agent: Analyzing image and creating strategy
+   [14:30:18] Nutrition Agent: Calculating comprehensive nutrition
+   [14:30:22] Health Agent: Generating personalized recommendations
+   [14:30:25] Meal Planning Agent: Suggesting complementary foods
+   [14:30:28] Verification Agent: Validating analysis results
+   [14:30:30] Analysis completed with confidence: 0.89
+```
+
 ## Future Enhancements
 
+### Traditional ML Enhancements
 - [ ] Integration with real Core ML food recognition model
 - [ ] Food database for improved nutrition accuracy
 - [ ] Portion size estimation
@@ -433,6 +559,23 @@ The app currently recognizes these sample foods:
 - [ ] Nutritional goals and recommendations
 - [ ] Barcode scanning for packaged foods
 - [ ] Social sharing features
+
+### 🚀 Agentic Workflow Enhancements
+- [ ] **Backend API Service**: Deploy agentic workflow as a web service
+- [ ] **iOS Integration**: Connect mobile app to agentic backend
+- [ ] **Progressive Loading**: Stream agent results in real-time to mobile UI
+- [ ] **Advanced Agents**:
+  - [ ] 🔍 Allergen Detection Agent
+  - [ ] 📊 Dietary Compliance Agent (keto, vegan, etc.)
+  - [ ] ⏰ Meal Timing Optimization Agent
+  - [ ] 🏃 Exercise Integration Agent
+  - [ ] 🛒 Shopping List Generation Agent
+  - [ ] 📈 Long-term Progress Tracking Agent
+- [ ] **User Profile Management**: Comprehensive health goals and preferences
+- [ ] **Multi-modal Analysis**: Voice descriptions, ingredient lists, recipes
+- [ ] **Social Features**: Share meal analyses and recommendations
+- [ ] **Offline Capabilities**: Local agent processing for privacy
+- [ ] **Continuous Learning**: Agent improvement based on user feedback
 
 ## Contributing
 

@@ -1,0 +1,142 @@
+# Requirements for Agentic Food Analysis Workflow
+
+## Python Dependencies
+openai>=1.0.0
+aiohttp>=3.8.0
+pillow>=9.0.0
+jupyter>=1.0.0
+pandas>=1.5.0
+numpy>=1.21.0
+
+## Development Dependencies
+pytest>=7.0.0
+black>=22.0.0
+flake8>=5.0.0
+
+## Optional Dependencies for Extended Features
+fastapi>=0.100.0  # For creating web API
+uvicorn>=0.20.0   # ASGI server for FastAPI
+redis>=4.0.0      # For caching results
+matplotlib>=3.5.0 # For data visualization
+seaborn>=0.11.0   # For enhanced plotting
+
+## Installation Instructions
+
+### Basic Installation
+```bash
+pip install openai aiohttp pillow jupyter pandas numpy
+```
+
+### Full Installation (with development tools)
+```bash
+pip install -r requirements.txt
+```
+
+### Using conda
+```bash
+conda install -c conda-forge openai aiohttp pillow jupyter pandas numpy
+```
+
+## Usage Examples
+
+### Command Line Usage
+```bash
+# Basic analysis
+python agentic_food_analysis.py --image food_photo.jpg --api-key your-openai-key
+
+# With user profile
+python agentic_food_analysis.py --image food_photo.jpg --api-key your-openai-key --user-profile sample_user_profile.json
+
+# Save results to file
+python agentic_food_analysis.py --image food_photo.jpg --api-key your-openai-key --output results.json
+```
+
+### Jupyter Notebook
+```bash
+# Start Jupyter
+jupyter notebook
+
+# Open the agentic workflow notebook
+# agentic_workflow_example.ipynb
+```
+
+### Python Script Integration
+```python
+import asyncio
+from agentic_food_analysis import AgenticWorkflowOrchestrator, load_image_as_base64
+
+async def analyze_food():
+    # Initialize orchestrator
+    api_key = "your-openai-api-key"
+    orchestrator = AgenticWorkflowOrchestrator(api_key)
+    
+    # Load and analyze image
+    image_base64 = load_image_as_base64("food_photo.jpg")
+    result = await orchestrator.analyze_food_image(image_base64)
+    
+    return result
+
+# Run analysis
+result = asyncio.run(analyze_food())
+```
+
+## Environment Variables
+
+```bash
+# Set your OpenAI API key
+export OPENAI_API_KEY="your-openai-api-key-here"
+
+# Optional: Set custom model
+export OPENAI_MODEL="gpt-4-vision-preview"
+
+# Optional: Set custom base URL
+export OPENAI_BASE_URL="https://api.openai.com/v1"
+```
+
+## System Requirements
+
+- Python 3.8+
+- Internet connection for OpenAI API calls
+- At least 1GB RAM for image processing
+- OpenAI API key with GPT-4 Vision access
+
+## Troubleshooting
+
+### Common Issues
+
+1. **ModuleNotFoundError**
+   ```bash
+   pip install --upgrade openai aiohttp pillow
+   ```
+
+2. **API Key Errors**
+   ```bash
+   export OPENAI_API_KEY="your-actual-key"
+   ```
+
+3. **Image Loading Errors**
+   - Ensure image file exists and is readable
+   - Supported formats: JPEG, PNG, GIF, BMP
+   - Maximum recommended size: 20MB
+
+4. **Network Timeouts**
+   - Check internet connection
+   - Verify OpenAI API status
+   - Try with smaller images
+
+### Performance Optimization
+
+1. **Image Size Optimization**
+   - Images are automatically resized to 1024x1024 max
+   - Use JPEG format for faster processing
+   - Compress images before analysis
+
+2. **API Rate Limiting**
+   - Implement delays between requests if needed
+   - Monitor your OpenAI usage dashboard
+   - Consider caching results for repeated analyses
+
+3. **Memory Management**
+   - Close image files after processing
+   - Use async operations for multiple analyses
+   - Clear cache periodically in long-running applications
