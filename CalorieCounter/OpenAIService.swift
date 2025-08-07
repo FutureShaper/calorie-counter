@@ -132,7 +132,7 @@ class OpenAIService {
             throw OpenAIError.emptyResponse
         }
         
-        // Try to extract JSON from the response
+        // Try to extract and validate JSON from the response
         let jsonString = extractJSON(from: content)
         
         guard let jsonData = jsonString.data(using: .utf8) else {
@@ -141,6 +141,9 @@ class OpenAIService {
         
         do {
             let nutritionResponse = try JSONDecoder().decode(OpenAINutritionResponse.self, from: jsonData)
+            
+            // Additional validation of decoded values
+            try validateNutritionValues(nutritionResponse)
             
             let nutritionData = NutritionData(
                 protein: nutritionResponse.protein,
@@ -155,27 +158,78 @@ class OpenAIService {
                 nutritionData: nutritionData,
                 recognizedFoodName: nutritionResponse.foodName
             )
-        } catch {
-            throw OpenAIError.nutritionParsingError
+        } catch let decodingError {
+            // Provide more specific error information
+            throw OpenAIError.nutritionParsingError(details: "Failed to decode nutrition JSON: \(decodingError.localizedDescription)")
         }
     }
     
-    /// Attempts to extract the first valid JSON object from the text.
-    /// This method scans for balanced braces and returns the substring.
+    /// Validates that nutrition values are reasonable and within expected ranges
+    private func validateNutritionValues(_ nutrition: OpenAINutritionResponse) throws {
+        // Check for negative values
+        guard nutrition.protein >= 0,
+              nutrition.carbohydrates >= 0,
+              nutrition.fats >= 0,
+              nutrition.fiber >= 0 else {
+            throw OpenAIError.nutritionParsingError(details: "Nutrition values cannot be negative")
+        }
+        
+        // Check for unreasonably high values (per 1000g serving)
+        guard nutrition.protein <= 1000,
+              nutrition.carbohydrates <= 1000,
+              nutrition.fats <= 1000,
+              nutrition.fiber <= 1000 else {
+            throw OpenAIError.nutritionParsingError(details: "Nutrition values exceed reasonable limits")
+        }
+        
+        // Validate confidence range
+        guard nutrition.confidence >= 0.0 && nutrition.confidence <= 1.0 else {
+            throw OpenAIError.nutritionParsingError(details: "Confidence must be between 0.0 and 1.0")
+        }
+        
+        // Validate food name is not empty
+        guard !nutrition.foodName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw OpenAIError.nutritionParsingError(details: "Food name cannot be empty")
+        }
+    }
+    
+    /// Attempts to extract and validate JSON from OpenAI response text.
+    /// This method tries multiple approaches to find valid nutrition JSON:
+    /// 1. Parse entire response as JSON
+    /// 2. Find JSON-like patterns and validate them
+    /// 3. Ensure extracted JSON has required nutrition fields
     private func extractJSON(from text: String) -> String {
-        // Try to parse the entire text as JSON first
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        if let _ = try? JSONSerialization.jsonObject(with: Data(trimmed.utf8)) {
+        
+        // Try to parse the entire text as JSON first
+        if isValidNutritionJSON(trimmed) {
             return trimmed
         }
         
-        // If that fails, scan for the first balanced JSON object
+        // If that fails, look for JSON patterns within the text
+        let jsonCandidates = findJSONPatterns(in: text)
+        
+        // Validate each candidate and return the first valid one
+        for candidate in jsonCandidates {
+            if isValidNutritionJSON(candidate) {
+                return candidate
+            }
+        }
+        
+        // Fallback: return the trimmed text and let downstream parsing handle the error
+        return trimmed
+    }
+    
+    /// Finds potential JSON patterns in text by looking for balanced braces
+    /// Returns array of candidate JSON strings ordered by likelihood
+    private func findJSONPatterns(in text: String) -> [String] {
+        var candidates: [String] = []
         var braceCount = 0
         var startIndex: String.Index? = nil
-        var endIndex: String.Index? = nil
         
         for (i, char) in text.enumerated() {
             let idx = text.index(text.startIndex, offsetBy: i)
+            
             if char == "{" {
                 if braceCount == 0 {
                     startIndex = idx
@@ -183,17 +237,66 @@ class OpenAIService {
                 braceCount += 1
             } else if char == "}" {
                 braceCount -= 1
-                if braceCount == 0, let s = startIndex {
-                    endIndex = idx
-                    // Found a balanced JSON object
-                    let jsonSubstring = text[s...endIndex!]
-                    return String(jsonSubstring)
+                if braceCount == 0, let start = startIndex {
+                    let candidate = String(text[start...idx])
+                    candidates.append(candidate)
+                    startIndex = nil
                 }
             }
         }
         
-        // Fallback: return the entire text and hope it's valid JSON
-        return trimmed
+        return candidates
+    }
+    
+    /// Validates that a JSON string contains the expected nutrition data structure
+    private func isValidNutritionJSON(_ jsonString: String) -> Bool {
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            return false
+        }
+        
+        do {
+            // Try to parse as JSON object
+            guard let jsonObject = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] else {
+                return false
+            }
+            
+            // Validate required fields exist and are of correct type
+            let requiredFields = ["protein", "carbohydrates", "fats", "fiber", "foodName", "confidence"]
+            
+            for field in requiredFields {
+                guard jsonObject[field] != nil else {
+                    return false
+                }
+            }
+            
+            // Validate numeric fields are actually numbers
+            let numericFields = ["protein", "carbohydrates", "fats", "fiber", "confidence"]
+            for field in numericFields {
+                guard let value = jsonObject[field], 
+                      (value is Double || value is Int || value is NSNumber) else {
+                    return false
+                }
+            }
+            
+            // Validate foodName is a string
+            guard jsonObject["foodName"] is String else {
+                return false
+            }
+            
+            // Validate confidence is in valid range (0.0 to 1.0)
+            if let confidence = jsonObject["confidence"] as? Double {
+                guard confidence >= 0.0 && confidence <= 1.0 else {
+                    return false
+                }
+            }
+            
+            // Additional validation: try to decode with our expected structure
+            _ = try JSONDecoder().decode(OpenAINutritionResponse.self, from: jsonData)
+            return true
+            
+        } catch {
+            return false
+        }
     }
 }
 
@@ -207,7 +310,7 @@ enum OpenAIError: LocalizedError {
     case decodingError
     case emptyResponse
     case invalidJSONResponse
-    case nutritionParsingError
+    case nutritionParsingError(details: String)
     
     var errorDescription: String? {
         switch self {
@@ -227,8 +330,8 @@ enum OpenAIError: LocalizedError {
             return "Received empty response from API"
         case .invalidJSONResponse:
             return "Invalid JSON response format"
-        case .nutritionParsingError:
-            return "Failed to parse nutrition data"
+        case .nutritionParsingError(let details):
+            return "Failed to parse nutrition data: \(details)"
         }
     }
 }

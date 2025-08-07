@@ -1,5 +1,11 @@
 import Foundation
 
+// Caloric values per gram (kcal/g) for each macronutrient
+let PROTEIN_CALORIES_PER_GRAM = 4.0      // Protein: 4 kcal/g
+let CARBOHYDRATE_CALORIES_PER_GRAM = 4.0 // Carbohydrates: 4 kcal/g
+let FAT_CALORIES_PER_GRAM = 9.0          // Fats: 9 kcal/g
+let FIBER_CALORIES_PER_GRAM = 2.0        // Fiber: 2 kcal/g
+
 /// Represents nutritional information for a food item
 struct NutritionData: Codable, Identifiable {
     let id = UUID()
@@ -19,8 +25,11 @@ struct NutritionData: Codable, Identifiable {
         self.fiber = fiber
         self.foodName = foodName
         
-        // Calculate calories: 4 cal/g for protein and carbs, 9 cal/g for fats, 2 cal/g for fiber
-        self.calories = (protein * 4) + (carbohydrates * 4) + (fats * 9) + (fiber * 2)
+        // Calculate calories using defined constants
+        self.calories = (protein * PROTEIN_CALORIES_PER_GRAM) +
+                       (carbohydrates * CARBOHYDRATE_CALORIES_PER_GRAM) +
+                       (fats * FAT_CALORIES_PER_GRAM) +
+                       (fiber * FIBER_CALORIES_PER_GRAM)
     }
 }
 
